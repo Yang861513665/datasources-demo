@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 /**
  * @author yangxj
@@ -30,7 +31,5 @@ public class TestDemo {
     UserRepository userRepository;
     @Test
     public void add() throws SQLException {
-        List<User_> userS = userRepository.findByNameLike("yangxj");
-        System.out.println(userS);
     }
 }

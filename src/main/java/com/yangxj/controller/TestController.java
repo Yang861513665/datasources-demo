@@ -4,24 +4,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.yangxj.cache.UserCacheConfig;
 import com.yangxj.entity.User_;
+import com.yangxj.mapper1.UserMapper1;
 import com.yangxj.repository.UserRepository;
+import com.yangxj.util.RedisLockUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
  * @author yangxj
@@ -35,6 +27,10 @@ public class TestController {
     UserCacheConfig userCacheConfig;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserMapper1 userMapper1;
+    @Autowired
+    RedisLockUtil redisLockUtil;
     @RequestMapping("test")
     public Object test(){
         Calendar instance = Calendar.getInstance();
@@ -75,5 +71,34 @@ public class TestController {
     @RequestMapping("testCache")
     public User_ getUserById(String id) throws ExecutionException {
         return userCacheConfig.getUserById(id);
+    }
+    @RequestMapping("redis")
+    public void test22(){
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        Random random = new Random();
+        CountDownLatch countDownLatch = new CountDownLatch(32);
+        for (int i = 0; i < 32; i++) {
+            executorService.submit(() -> {
+                try {
+                    System.out.println("准备执行。。。");
+                    countDownLatch.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+               try {
+                   redisLockUtil.lock("count");
+                   int count = userMapper1.selectCount();
+                   if(count>0){
+                       System.out.println("执行扣减。。。"+userMapper1.countDown());
+                   }
+                   redisLockUtil.unlock("count");
+                   Thread.sleep(random.nextInt(100));
+               }catch (Exception e){
+                   e.printStackTrace();
+               }
+            });
+            countDownLatch.countDown();
+          }
+        executorService.shutdown();
     }
 }

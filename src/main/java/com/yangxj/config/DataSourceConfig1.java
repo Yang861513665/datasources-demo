@@ -41,7 +41,7 @@ public class DataSourceConfig1{
         return factory.getObject();
     }
     @Bean
-//    @Primary
+    @Primary
     DataSourceTransactionManager transactionManager(){
         return new DataSourceTransactionManager(dataSource1());
     }
