@@ -23,7 +23,6 @@ public class LogPointCutProcess {
     public Object doBasicProfiling(ProceedingJoinPoint pjp) throws Throwable {
         Stopwatch stopwatch = Stopwatch.createStarted();
         Object retVal = pjp.proceed();
-        Runtime.getRuntime().availableProcessors()
         log.info("方法: {},耗时: {}ms",pjp.getSignature().toString(),stopwatch.elapsed(TimeUnit.MILLISECONDS));
         return retVal;
     }
