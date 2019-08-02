@@ -43,9 +43,16 @@ public class RedisLockUtil {
 
     public void unlock(String lockName) {
         String uuid = local.get();
+        /**
+         * 在执行（2）步时候，可能由于网络问题
+         * 导致key已经过期了，这时又会出现误释放他人锁问题
+         * （1） if(uuid.equals(RedisUtils.getConnection().get(lockName))){
+         * （2） RedisUtils.getConnection().del(lockName);
+          * }
+         * 因此我们使用lua脚本来解决这个问题
+         */
         String lua = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del',KEYS[1]) else return 0 end";// lua脚本，用来释放分布式锁
         Jedis jedis = RedisUtils.getConnection();
-//        Object eval = jedis.eval(lua, Collections.singletonList(lockName),Collections.singletonList(uuid));
         Object eval = jedis.eval(lua, Arrays.asList(lockName), Arrays.asList(uuid));
         if(eval.equals("1")){
             System.out.println("release lock success");
