@@ -1,12 +1,14 @@
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.yangxj.Application;
+import com.yangxj.common.TestDynamicDataSource;
 import com.yangxj.entity.User;
-import com.yangxj.entity.User_;
+//import com.yangxj.entity.User_;
 import com.yangxj.mapper1.UserMapper1;
 import com.yangxj.mapper2.UserMapper2;
-import com.yangxj.repository.UserRepository;
+//import com.yangxj.repository.UserRepository;
 import com.yangxj.service.UserService;
+import com.yangxj.service.UserService2;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,12 @@ import java.util.concurrent.Executors;
 @RunWith(SpringRunner.class)
 public class TestDemo {
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
+    @Autowired
+    UserService2 userService2;
     @Test
     public void add() throws SQLException {
+        userService.add();
+        userService2.add();
     }
 }

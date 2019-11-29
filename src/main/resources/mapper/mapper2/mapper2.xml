@@ -4,6 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yangxj.mapper2.UserMapper2">
     <insert id="save">
-        insert into user values(#{name},#{money})
+        insert into user(name, money) values(#{name},#{money})
     </insert>
 </mapper>

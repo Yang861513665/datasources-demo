@@ -19,7 +19,7 @@ import javax.sql.DataSource;
  * @author yangxj
  * @date 2019/5/20-21:13
  */
-@Configuration
+//@Configuration
 @MapperScan(basePackages = "com.yangxj.mapper1",sqlSessionFactoryRef = "sqlSessionFactory1")
 public class DataSourceConfig1{
 
@@ -32,6 +32,7 @@ public class DataSourceConfig1{
         config.setPassword("root");
         return new HikariDataSource(config);
     }
+
     @Bean(name = "sqlSessionFactory1")
     @Primary
     SqlSessionFactory sqlSessionFactory1(@Qualifier("ds1")DataSource dataSource) throws Exception {

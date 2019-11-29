@@ -1,5 +1,6 @@
 package com.yangxj.mapper1;
 
+import com.yangxj.annotation.TargetDataSource;
 import com.yangxj.entity.User;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -10,9 +11,9 @@ import org.apache.ibatis.annotations.Update;
  */
 public interface UserMapper1 {
     int save(User user);
-    @Update("update redis_count set count = count -1")
-    int countDown();
-
-    @Select("select count from redis_count")
-    int selectCount();
+//    @Update("update redis_count set count = count -1")
+//    int countDown();
+//
+//    @Select("select count from redis_count")
+//    int selectCount();
 }

@@ -20,7 +20,7 @@ import javax.sql.DataSource;
  * @author yangxj
  * @date 2019/5/20-21:13
  */
-@Configuration
+//@Configuration
 @MapperScan(basePackages = "com.yangxj.mapper2",sqlSessionFactoryRef = "sqlSessionFactory2")
 public class DataSourceConfig2 {
     @Bean(name = "ds2")

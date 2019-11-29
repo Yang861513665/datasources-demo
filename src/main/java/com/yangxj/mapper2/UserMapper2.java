@@ -1,5 +1,6 @@
 package com.yangxj.mapper2;
 
+import com.yangxj.annotation.TargetDataSource;
 import com.yangxj.entity.User;
 import org.apache.ibatis.annotations.Insert;
 

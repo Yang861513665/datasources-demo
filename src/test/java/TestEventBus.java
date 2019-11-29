@@ -3,7 +3,7 @@ import com.google.common.eventbus.Subscribe;
 import org.junit.Test;
 
 
-public class TesEventBus {
+public class TestEventBus {
 
     @Test
     public void testReceiveEvent() throws Exception {
