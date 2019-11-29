@@ -4,6 +4,44 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yangxj.mapper1.UserMapper1">
     <insert id="save">
-        insert into user(name, money) values(#{name},#{money})
+        insert into user(name, money,birthday) values(#{user.name},#{user.money},#{user.birthday},#{user.status})
     </insert>
+
+    <insert id="batchAdd">
+        insert into user(name, money,birthday) values
+        <foreach collection="users" item="user" separator=",">
+            (#{user.name},#{money},#{user.birthday})
+        </foreach>
+    </insert>
+    <insert id="save2">
+       insert into user (
+       <trim>
+           <if test="name !=null">
+               name,
+           </if>
+           <if test="money !=null">
+               money,
+           </if>
+           <if test="birthday !=null">
+               birthday
+           </if>
+       </trim>
+       )values (
+        <trim>
+            <if test="name !=null">
+                #{name},
+            </if>
+            <if test="money !=null">
+                #{money},
+            </if>
+            <if test="birthday !=null">
+                #{birthday}
+            </if>
+        </trim>
+        )
+    </insert>
+    <insert id="save3">
+                        insert into user(name, money,birthday,status) values(#{map.name},#{map.money},#{birthday},#{status})
+    </insert>
+
 </mapper>

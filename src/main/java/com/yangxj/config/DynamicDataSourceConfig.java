@@ -1,7 +1,9 @@
 package com.yangxj.config;
 
+import com.yangxj.interceptor.SqlInterceptor;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -40,11 +42,16 @@ public class DynamicDataSourceConfig {
     }
 
     @Bean(name = "sqlSessionFactory")
-    SqlSessionFactory sqlSessionFactory(@Qualifier("dynamicDataSource")DataSource dataSource) throws Exception {
+    SqlSessionFactory sqlSessionFactory(@Qualifier("dynamicDataSource")DataSource dataSource, Interceptor sqlInterceptor) throws Exception {
         final SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(dataSource);
         factory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*/*.xml"));
+        factory.setPlugins(new Interceptor[]{sqlInterceptor});
         return factory.getObject();
+    }
+    @Bean
+    Interceptor sqlInterceptor(){
+        return new SqlInterceptor();
     }
     @Bean("dynamicDataSource")
     DynamicDataSource dynamicDataSource(DataSource ds1, DataSource ds2){
